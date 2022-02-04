@@ -23,7 +23,6 @@ const UploadPost = ({ user }) => {
 		category: selectedValue,
 		fullName: "",
 	});
-	const [photoUrl, setPhotoUrl] = useState();
 
 	const [filePath, setFilePath] = useState({});
 	const [selectedValue, setSelectedValue] = useState("Cat");
@@ -63,9 +62,10 @@ const UploadPost = ({ user }) => {
 				path: "images",
 			},
 			selectionLimit: 1,
+			noData: true,
 		};
 		ImagePicker.launchImageLibrary(options, (response) => {
-			// console.log("Response = ", response);
+			console.log("Response = ", response.assets[0]);
 
 			if (response.didCancel) {
 				console.log("User cancelled image picker");
@@ -80,7 +80,7 @@ const UploadPost = ({ user }) => {
 			}
 		});
 	};
-	const submitPost = async () => {
+	const submitPost = () => {
 		console.log("UploadPost>>>PostData", postData);
 		const image = {
 			name: filePath.fileName,
@@ -92,26 +92,20 @@ const UploadPost = ({ user }) => {
 		formdata.append("title", postData.title);
 		formdata.append("category", selectedValue);
 		formdata.append("image", image);
-		// formdata.append("filename", filePath.fileName);
+		formdata.append("filename", filePath.fileName);
 		formdata.append("userName", postData.userId);
 		console.log("UploadPost>>>Formdata", formdata);
-		// console.log("FORMDATA----------------------------", formdata.values());
-		setPhotoUrl(formdata._parts[2][1].uri);
-		// await axios
-		// 	.post(`${config.SERVER_URL}/post/upload`, formdata)
-		// 	.then((resp) => console.log("UploadPost>>>>resp", resp.data))
-		// 	.catch((error) => console.error("UploadPost>>>error", error));
 
-		await axios({
+		axios({
+			url: `${config.SERVER_URL}/post/upload`,
 			method: 'POST',
 			data: formdata,
 			withCredentials: true,
-			url: `${config.SERVER_URL}/post/upload`
 		})
 			.then((res) => {
 				console.log(res);
 				if (res.data.success) {
-					alert(res.data.message);
+					console.log(res.data.message);
 				}
 				else {
 					console.log('not added');
@@ -161,7 +155,6 @@ const UploadPost = ({ user }) => {
 				onPress={() => submitPost()}
 			>
 				<Text style={styles.submitTitle}>Upload Post</Text>
-				{photoUrl && <Image source={{ uri: photoUrl }} style={{ width: 300, height: 300 }} />}
 
 			</TouchableOpacity>
 		</View>

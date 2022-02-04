@@ -5,10 +5,32 @@ import {
     View,
     StyleSheet,
     Image,
-    FlatList
+    Share,
+    FlatList,
+    TouchableOpacity
 } from "react-native";
 
 import config from "../Config";
+
+const onShare = async () => {
+    try {
+        const result = await Share.share({
+            message:
+                'Link to the app: https://www.myapp.com',
+        });
+        if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+                // shared with activity type of result.activityType
+            } else {
+                // shared
+            }
+        } else if (result.action === Share.dismissedAction) {
+            // dismissed
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 
 const Post = ({ item }) => {
     return (
@@ -68,9 +90,9 @@ const Post = ({ item }) => {
                 {/* footerContainer */}
                 <View style={styles.footerContainer}>
                     {/* shareContainer */}
-                    <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => onShare()} style={styles.buttonContainer}>
                         <Image source={require("../../images/icon_001.png")} />
-                    </View>
+                    </TouchableOpacity>
                     {/* FlageContainer */}
                     <View style={styles.buttonContainer}>
                         <Image source={require("../../images/btm_img2.png")} />

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import SplashScreen from 'react-native-splash-screen';
 
 import NavBar from './src/components/NavBar';
 import Timeline from './src/Screens/Timeline';
@@ -13,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage/';
 
 const App = () => {
 	const [token, setToken] = useState();
-	const [user, setUser] = useState();
+	const [user, setUser] = useState([null]);
 	const load = async () => {
 		try {
 			console.log("TOKEN:", token);
@@ -27,6 +30,9 @@ const App = () => {
 	useEffect(() => {
 		load();
 	}, [token]);
+	useEffect(() => {
+		SplashScreen.hide();
+	}, []);
 
 	return (
 		<NavigationContainer>

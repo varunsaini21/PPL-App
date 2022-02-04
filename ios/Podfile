@@ -12,6 +12,8 @@ target 'MyFirstApp' do
     :hermes_enabled => false
   )
 
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
   target 'MyFirstAppTests' do
     inherit! :complete
     # Pods for testing
